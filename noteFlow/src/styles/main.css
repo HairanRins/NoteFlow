@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  /* ─── Colors ──────────────────────────────────── */
+  --color-surface: #0b1326;
+  --color-surface-dim: #0b1326;
+  --color-surface-bright: #31394d;
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+  --color-surface-variant: #2d3449;
+  --color-surface-tint: #bac3ff;
+
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #c5c5d4;
+  --color-on-background: #dae2fd;
+  --color-background: #0b1326;
+
+  --color-primary: #bac3ff;
+  --color-primary-fixed: #dee0ff;
+  --color-primary-fixed-dim: #bac3ff;
+  --color-primary-container: #4453a7;
+  --color-on-primary: #15267b;
+  --color-on-primary-container: #c9cfff;
+  --color-on-primary-fixed: #00105b;
+  --color-on-primary-fixed-variant: #2f3f92;
+  --color-inverse-primary: #4858ab;
+
+  --color-secondary: #b9c8de;
+  --color-secondary-container: #39485a;
+  --color-secondary-fixed: #d4e4fa;
+  --color-secondary-fixed-dim: #b9c8de;
+  --color-on-secondary: #233143;
+  --color-on-secondary-container: #a7b6cc;
+  --color-on-secondary-fixed: #0d1c2d;
+  --color-on-secondary-fixed-variant: #39485a;
+
+  --color-tertiary: #ffb784;
+  --color-tertiary-container: #8f4700;
+  --color-tertiary-fixed: #ffdcc6;
+  --color-tertiary-fixed-dim: #ffb784;
+  --color-on-tertiary: #502500;
+  --color-on-tertiary-container: #ffc7a2;
+  --color-on-tertiary-fixed: #301400;
+  --color-on-tertiary-fixed-variant: #713700;
+
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  --color-outline: #8f909e;
+  --color-outline-variant: #454652;
+  --color-inverse-surface: #dae2fd;
+  --color-inverse-on-surface: #283044;
+
+  /* ─── Border Radius ───────────────────────────── */
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+
+  /* ─── Font Families ───────────────────────────── */
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Inter", sans-serif;
+}
+
+/* ─── Base styles ────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  margin: 0;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* ─── Material Symbols ───────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.material-symbols-filled {
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+/* ─── Utilities ──────────────────────────────────── */
+.glass-effect {
+  background-color: color-mix(
+    in srgb,
+    var(--color-surface-variant) 60%,
+    transparent
+  );
+  backdrop-filter: blur(24px);
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #bac3ff 0%, #4453a7 100%);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

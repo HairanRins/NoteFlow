@@ -1,5 +1,27 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
+import App from "./App.vue";
+import "./styles/main.css";
 
-createApp(App).mount('#app')
+// ─── Routes ──────────────────────────────────────────
+const routes = [
+  {
+    path: "/",
+    name: "Home",
+    component: () => import("./pages/Home.vue"),
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    return { top: 0 };
+  },
+});
+
+// ─── App ──────────────────────────────────────────────
+const app = createApp(App);
+app.use(router);
+app.mount("#app");
