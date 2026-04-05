@@ -3,7 +3,7 @@
 
 <template>
   <!-- USER FLOW -->
-  <section class="py-20 px-6 bg-surface-container">
+  <section id="user-flow" class="py-20 px-6 bg-surface-container">
     <div class="max-w-6xl mx-auto">
       <div class="section-label text-on-surface-variant font-label text-xs uppercase tracking-wider mb-3 text-left">User Flow</div>
       <h2 class="section-title font-headline font-bold text-4xl md:text-5xl text-on-background mb-6 text-left">

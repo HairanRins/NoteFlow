@@ -22,7 +22,7 @@ const graphLines = [
       <!-- ① Markdown First — col-span-7 -->
       <div
         class="md:col-span-7 bg-surface-container-low rounded-2xl p-8
-               relative overflow-hidden group"
+               relative overflow-hidden group hover:scale-[1.02] hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/20"
       >
         <div class="relative z-10 flex flex-col h-full">
           <div class="mb-auto">
@@ -53,7 +53,7 @@ const graphLines = [
       <!-- ② Bi-directional Links — col-span-5 -->
       <div
         class="md:col-span-5 bg-surface-container-low rounded-2xl p-8
-               relative overflow-hidden"
+               relative overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-300 border border-transparent hover:border-tertiary/20"
       >
         <h3 class="text-2xl font-headline font-bold text-on-background mb-3">
           Bi-directional Links
@@ -102,7 +102,7 @@ const graphLines = [
       </div>
 
       <!-- ③ Instant Search — col-span-6 -->
-      <div class="md:col-span-6 bg-surface-container-low rounded-2xl p-8">
+      <div class="md:col-span-6 bg-surface-container-low rounded-2xl p-8 hover:scale-[1.02] hover:shadow-xl transition-all duration-300 border border-transparent hover:border-secondary/20">
         <h3 class="text-2xl font-headline font-bold text-on-background mb-3">
           Instant Search
         </h3>
@@ -147,7 +147,7 @@ const graphLines = [
       <!-- ④ Offline & Sync — col-span-6 -->
       <div
         class="md:col-span-6 bg-surface-container-low rounded-2xl p-8
-               flex flex-col justify-between"
+               flex flex-col justify-between hover:scale-[1.02] hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/20"
       >
         <div>
           <h3 class="text-2xl font-headline font-bold text-on-background mb-3">

@@ -3,7 +3,7 @@
 
 <template>
   <!-- PRICING -->
-  <section class="py-20 px-6 bg-surface">
+  <section id="pricing" class="py-20 px-6 bg-surface">
     <div class="max-w-6xl mx-auto">
       <div class="section-label text-on-surface-variant font-label text-xs uppercase tracking-wider mb-3 text-left">Tarifs</div>
       <h2 class="section-title font-headline font-bold text-4xl md:text-5xl text-on-background mb-4 text-left">

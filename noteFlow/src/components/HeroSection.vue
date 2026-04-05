@@ -6,7 +6,7 @@ const count = ref(0)
 </script>
 
 <template>
-  <section class="hero">
+  <section id="hero" class="hero">
     <div class="max-w-4xl mx-auto text-center space-y-8 flex-grow">
       <!-- Hero Image -->
       <div class="relative inline-block">
@@ -19,8 +19,8 @@ const count = ref(0)
 
       <!-- Content -->
       <div class="space-y-6">
-        <h1 class="hero-title">
-          <span class="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">Ton esprit,<br /><em class="italic">organisé sans effort</em></span>
+        <h1 class="hero-title animate-fade-in-up">
+          <span class="bg-gradient-to-r from-primary via-tertiary to-secondary bg-[length:200%_auto] animate-gradient-xy bg-clip-text text-transparent drop-shadow-sm">Ton esprit,<br /><em class="italic">organisé sans effort</em></span>
         </h1>
         
         <p class="hero-sub">
@@ -31,12 +31,12 @@ const count = ref(0)
       </div>
 
       <!-- CTA Buttons -->
-      <div class="hero-actions">
-        <button class="btn-primary">
+      <div class="hero-actions animate-fade-in-up" style="animation-delay: 200ms;">
+        <button class="btn-primary hover:scale-105 hover:shadow-lg transition-all duration-300">
           Essayer gratuitement
         </button>
         
-        <button class="btn-secondary">
+        <button class="btn-secondary hover:scale-105 hover:bg-surface-variant transition-all duration-300">
           Voir la démo live
         </button>
       </div>
@@ -45,21 +45,21 @@ const count = ref(0)
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12">
         <div class="space-y-2">
           <div class="text-3xl font-bold text-primary">{{ count + 100 }}</div>
-          <p class="text-sm text-on-surface-variant">Active Users</p>
+          <p class="text-sm text-on-surface-variant">Utilisateurs actifs</p>
         </div>
         <div class="space-y-2">
           <div class="text-3xl font-bold text-tertiary">5K+</div>
-          <p class="text-sm text-on-surface-variant">Notes Created</p>
+          <p class="text-sm text-on-surface-variant">Notes créées</p>
         </div>
         <div class="space-y-2">
           <div class="text-3xl font-bold text-secondary">99%</div>
-          <p class="text-sm text-on-surface-variant">Uptime</p>
+          <p class="text-sm text-on-surface-variant">Disponibilité</p>
         </div>
       </div>
     </div>
 
     <!-- MARQUEE -->
-    <div class="marquee-wrap w-full">
+    <div class="marquee-wrap">
       <div class="marquee-inner animate-marquee">
         <span class="marquee-item">Markdown editor <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Graphe mental <span class="marquee-dot">●</span></span>
@@ -79,11 +79,13 @@ const count = ref(0)
         <span class="marquee-item">VILT Stack <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Toile canvas <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Recherche instantanée <span class="marquee-dot">●</span></span>
+        <span class="marquee-item">Tags & filtres <span class="marquee-dot">●</span></span>
+        <span class="marquee-item">SaaS-ready <span class="marquee-dot">●</span></span>
       </div>
     </div>
 
     <!-- FEATURES -->
-    <section class="py-20 px-6 bg-surface">
+    <section id="features" class="py-20 px-6 bg-surface">
       <div class="max-w-6xl mx-auto">
         <div class="section-label text-on-surface-variant font-label text-xs uppercase tracking-wider mb-3 text-left">Fonctionnalités</div>
         <h2 class="section-title font-headline font-bold text-4xl md:text-5xl text-on-background mb-4 text-left">
@@ -180,3 +182,31 @@ const count = ref(0)
     </section>
   </section>
 </template>
+
+<!-- Custom CSS for Hero Animations -->
+<style scoped>
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+@keyframes gradient-xy {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-xy {
+  animation: gradient-xy 6s ease infinite;
+}
+.feat-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.feat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(170, 59, 255, 0.1), 0 8px 10px -6px rgba(170, 59, 255, 0.1);
+  border-color: var(--accent-border);
+}
+</style>

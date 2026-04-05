@@ -3,11 +3,25 @@ import { ref } from 'vue'
 import logoImg from '../../assets/images/NoteFlow.png'
 
 const navLinks = [
-  { label: 'Fonctionnalités', href: '#features', active: true },
-  { label: 'Flux', href: '#flux', active: false },
+  { label: 'Accueil', href: '#hero', active: false },
+  { label: 'Fonctionnalités', href: '#features', active: false },
+  { label: 'Flux', href: '#user-flow', active: false },
   { label: 'Tarifs', href: '#pricing', active: false },
-  { label: 'Docs', href: '#docs', active: false },
 ]
+
+const scrollToSection = (href) => {
+  const element = document.querySelector(href)
+  if (element) {
+    const navbarHeight = 64 // Height of fixed navbar
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+    const offsetPosition = elementPosition - navbarHeight
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
+  }
+}
 </script>
 
 <template>
@@ -38,6 +52,7 @@ const navLinks = [
         v-for="link in navLinks"
         :key="link.label"
         :href="link.href"
+        @click.prevent="scrollToSection(link.href)"
         :class="[
           'font-headline text-sm tracking-tight transition-colors',
           link.active

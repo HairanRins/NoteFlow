@@ -2,8 +2,6 @@
 import TheNavbar    from '@/components/layout/Navbar.vue'
 import HeroSection  from '@/components/HeroSection.vue'
 import UserFlow     from '@/components/UserFlow.vue'
-import BentoFeatures from '@/components/sections/BentoFeatures.vue'
-import CtaSection   from '@/components/sections/CtaSection.vue'
 import PricingSection from '@/components/PricingSection.vue'
 import FinalCtaSection from '@/components/FinalCtaSection.vue'
 import TheFooter    from '@/components/layout/Footer.vue'
@@ -16,8 +14,6 @@ import TheFooter    from '@/components/layout/Footer.vue'
     <main class="pt-16">
       <HeroSection />
       <UserFlow />
-      <BentoFeatures />
-      <CtaSection />
       
       <!-- QUOTE -->
       <div class="primary-gradient py-20 px-6 text-center">
