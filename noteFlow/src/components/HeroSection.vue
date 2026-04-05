@@ -32,10 +32,13 @@ const count = ref(0)
 
       <!-- CTA Buttons -->
       <div class="hero-actions animate-fade-in-up" style="animation-delay: 200ms;">
-        <button class="btn-primary hover:scale-105 hover:shadow-lg transition-all duration-300">
+        <RouterLink
+          to="/signup"
+          class="btn-primary hover:scale-105 hover:shadow-lg transition-all duration-300 inline-block"
+        >
           Essayer gratuitement
-        </button>
-        
+        </RouterLink>
+
         <button class="btn-secondary hover:scale-105 hover:bg-surface-variant transition-all duration-300">
           Voir la démo live
         </button>

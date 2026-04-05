@@ -20,13 +20,14 @@
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <button
+        <RouterLink
+          to="/signup"
           class="primary-gradient text-on-primary px-8 py-4 rounded-xl font-bold
                  text-lg shadow-xl hover:shadow-primary/20 transition-all
-                 active:scale-95"
+                 active:scale-95 inline-block text-center"
         >
           Download for Desktop
-        </button>
+        </RouterLink>
         <button
           class="bg-surface-container-highest text-on-surface border border-outline-variant/30
                  px-8 py-4 rounded-xl font-bold text-lg hover:bg-surface-bright

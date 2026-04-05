@@ -65,9 +65,12 @@ const scrollToSection = (href) => {
     </div>
 
     <!-- CTA Button -->
-    <button class="nav-cta primary-gradient text-on-primary font-headline font-bold px-5 py-2 rounded-md
-                     scale-95 active:scale-90 transition-transform">
+    <RouterLink
+      to="/signup"
+      class="nav-cta primary-gradient text-on-primary font-headline font-bold px-5 py-2 rounded-md
+                     scale-95 active:scale-90 transition-transform inline-block"
+    >
       Commencer — gratuit
-    </button>
+    </RouterLink>
   </nav>
 </template>

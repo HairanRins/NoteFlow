@@ -45,9 +45,12 @@
               Markdown complet
             </li>
           </ul>
-          <button class="price-btn w-full bg-primary text-on-primary font-headline font-semibold py-3 rounded-lg hover:bg-primary-container transition-colors">
+          <RouterLink
+            to="/signup"
+            class="price-btn w-full bg-primary text-on-primary font-headline font-semibold py-3 rounded-lg hover:bg-primary-container transition-colors inline-block text-center"
+          >
             Commencer
-          </button>
+          </RouterLink>
         </div>
         <div class="price-card bg-surface-container border-2 border-primary rounded-xl p-8 relative">
           <div class="popular-badge absolute -top-3 right-6 bg-primary text-on-primary text-xs font-label px-3 py-1 rounded-full">★ Populaire</div>
@@ -85,9 +88,12 @@
               Thèmes personnalisés
             </li>
           </ul>
-          <button class="price-btn w-full bg-primary text-on-primary font-headline font-semibold py-3 rounded-lg hover:bg-primary-container transition-colors">
+          <RouterLink
+            to="/signup"
+            class="price-btn w-full bg-primary text-on-primary font-headline font-semibold py-3 rounded-lg hover:bg-primary-container transition-colors inline-block text-center"
+          >
             Essai 14 jours gratuit
-          </button>
+          </RouterLink>
         </div>
         <div class="price-card bg-surface-container border border-outline rounded-xl p-8 relative">
           <div class="price-name font-label text-xs text-on-surface-variant uppercase tracking-wider mb-4">Équipe</div>

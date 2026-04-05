@@ -14,9 +14,12 @@
         Gratuit pour toujours. Aucune carte de crédit requise.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-center mb-6">
-        <button class="primary-gradient text-on-primary font-headline font-semibold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity">
+        <RouterLink
+          to="/signup"
+          class="primary-gradient text-on-primary font-headline font-semibold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity inline-block text-center"
+        >
           Créer mon espace — gratuit
-        </button>
+        </RouterLink>
         <button class="bg-surface border border-outline text-on-background font-headline font-semibold py-3 px-8 rounded-lg hover:bg-surface-container transition-colors">
           Voir sur GitHub
         </button>
