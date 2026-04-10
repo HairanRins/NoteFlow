@@ -6,6 +6,7 @@ const form = ref({
   name:     '',
   email:    '',
   password: '',
+  avatar:   null,
 })
 
 const features = [
@@ -24,6 +25,13 @@ const features = [
     description: 'Prenez des notes à la vitesse de la pensée avec Markdown.',
   },
 ]
+
+function handleAvatarUpload(event) {
+  const file = event.target.files[0]
+  if (file) {
+    form.value.avatar = file
+  }
+}
 
 function handleSubmit() {
   // TODO: brancher sur l'API d'authentification
@@ -57,7 +65,6 @@ function handleSubmit() {
       </nav>
     </header>
 
-    <!-- ─── Contenu principal ─────────────────────────────── -->
     <main
       class="flex-grow flex items-center justify-center relative overflow-hidden
              bg-architect-mesh px-6 py-12"
@@ -128,7 +135,6 @@ function handleSubmit() {
           </div>
         </div>
 
-        <!-- ─── Formulaire d'inscription ─────────────────── -->
         <div class="w-full max-w-md mx-auto">
           <div class="bg-surface-container-low p-8 md:p-10 rounded-xl">
             <div class="mb-8">
@@ -219,6 +225,45 @@ function handleSubmit() {
                 </div>
               </div>
 
+              <!-- Avatar -->
+              <div class="space-y-2">
+                <label
+                  class="font-label text-[0.6875rem] uppercase tracking-widest
+                         text-on-surface-variant font-medium ml-1"
+                >
+                  Avatar (optionnel)
+                </label>
+                <div class="relative group">
+                  <div
+                    class="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-0
+                           bg-primary group-focus-within:h-3/4
+                           transition-all duration-300"
+                  />
+                  <input
+                    @change="handleAvatarUpload"
+                    type="file"
+                    accept="image/*"
+                    class="w-full bg-surface-container-lowest border-none
+                           text-on-surface py-3 px-4 rounded-md focus:ring-0
+                           file:mr-4 file:py-1 file:px-3 file:rounded-md
+                           file:border-0 file:text-sm file:font-medium
+                           file:bg-primary file:text-on-primary
+                           file:cursor-pointer hover:file:bg-primary/90
+                           placeholder:text-on-surface-variant/30 text-sm font-body"
+                  />
+                </div>
+                <div v-if="form.avatar" class="flex items-center gap-2 mt-2">
+                  <img
+                    :src="URL.createObjectURL(form.avatar)"
+                    alt="Avatar preview"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span class="text-xs text-on-surface-variant">
+                    {{ form.avatar.name }}
+                  </span>
+                </div>
+              </div>
+
               <!-- Bouton CTA -->
               <div class="pt-4">
                 <button
@@ -268,18 +313,6 @@ function handleSubmit() {
       </div>
     </main>
 
-    <!-- ─── Pied de page ──────────────────────────────────── -->
     <TheFooter />
   </div>
 </template>
-
-<style scoped>
-.bg-architect-mesh {
-  background-image: radial-gradient(
-    circle at 2px 2px,
-    rgba(69, 70, 82, 0.15) 1px,
-    transparent 0
-  );
-  background-size: 32px 32px;
-}
-</style>

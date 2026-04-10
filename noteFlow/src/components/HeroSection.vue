@@ -45,7 +45,7 @@ const count = ref(0)
       </div>
 
       <!-- Feature flags -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 pb-12">
         <div class="space-y-2">
           <div class="text-3xl font-bold text-primary">{{ count + 100 }}</div>
           <p class="text-sm text-on-surface-variant">Utilisateurs actifs</p>
@@ -67,23 +67,17 @@ const count = ref(0)
         <span class="marquee-item">Markdown editor <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Graphe mental <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Note quotidienne <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">Sync offline-first <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Liens [[bidirectionnels]] <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">VILT Stack <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Toile canvas <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Recherche instantanée <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Tags & filtres <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">SaaS-ready <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Markdown editor <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Graphe mental <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Note quotidienne <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">Sync offline-first <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Liens [[bidirectionnels]] <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">VILT Stack <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Toile canvas <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Recherche instantanée <span class="marquee-dot">●</span></span>
         <span class="marquee-item">Tags & filtres <span class="marquee-dot">●</span></span>
-        <span class="marquee-item">SaaS-ready <span class="marquee-dot">●</span></span>
       </div>
     </div>
 

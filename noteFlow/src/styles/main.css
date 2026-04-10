@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./architect-mesh.css";
 
 @theme {
   /* ─── Colors ──────────────────────────────────── */
@@ -156,7 +157,7 @@ body {
   overflow: hidden;
   padding: 20px 0;
   background: var(--color-surface-container);
-  width: 100%;
+  margin-top: 20px;
 }
 
 .marquee-item {

@@ -18,7 +18,6 @@ function handleSubmit() {
     class="bg-background text-on-background font-body min-h-screen flex flex-col
            selection:bg-primary-container selection:text-on-primary-container"
   >
-    <!-- ─── En-tête ─────────────────────────────────────── -->
     <header class="bg-[#0b1326] w-full top-0 z-50">
       <nav
         class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto"
@@ -39,7 +38,6 @@ function handleSubmit() {
       </nav>
     </header>
 
-    <!-- ─── Contenu principal ─────────────────────────────── -->
     <main
       class="flex-grow flex items-center justify-center relative overflow-hidden
              bg-architect-mesh px-6 py-12"
@@ -153,18 +151,7 @@ function handleSubmit() {
       </div>
     </main>
 
-    <!-- ─── Pied de page ──────────────────────────────────── -->
     <TheFooter />
   </div>
 </template>
 
-<style scoped>
-.bg-architect-mesh {
-  background-image: radial-gradient(
-    circle at 2px 2px,
-    rgba(69, 70, 82, 0.15) 1px,
-    transparent 0
-  );
-  background-size: 32px 32px;
-}
-</style>
