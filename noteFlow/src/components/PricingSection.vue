@@ -54,7 +54,7 @@
         </div>
         <div class="price-card bg-surface-container border-2 border-primary rounded-xl p-8 relative">
           <div class="popular-badge absolute -top-3 right-6 bg-primary text-on-primary text-xs font-label px-3 py-1 rounded-full">★ Populaire</div>
-          <div class="price-name font-label text-xs text-on-primary uppercase tracking-wider mb-4">Pro</div>
+          <div class="price-name font-label text-xs text-on-surface-variant uppercase tracking-wider mb-4">Pro</div>
           <div class="mb-4">
             <span class="price-amount font-headline text-4xl text-on-background">7€</span>
             <span class="price-period font-body text-sm text-on-surface-variant">/mois</span>

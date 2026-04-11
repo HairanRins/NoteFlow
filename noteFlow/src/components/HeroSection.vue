@@ -43,22 +43,6 @@ const count = ref(0)
           Voir la démo live
         </button>
       </div>
-
-      <!-- Feature flags -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 pb-12">
-        <div class="space-y-2">
-          <div class="text-3xl font-bold text-primary">{{ count + 100 }}</div>
-          <p class="text-sm text-on-surface-variant">Utilisateurs actifs</p>
-        </div>
-        <div class="space-y-2">
-          <div class="text-3xl font-bold text-tertiary">5K+</div>
-          <p class="text-sm text-on-surface-variant">Notes créées</p>
-        </div>
-        <div class="space-y-2">
-          <div class="text-3xl font-bold text-secondary">99%</div>
-          <p class="text-sm text-on-surface-variant">Disponibilité</p>
-        </div>
-      </div>
     </div>
 
     <!-- MARQUEE -->
