@@ -6,7 +6,7 @@
     <title>API Documentation - Swagger UI</title>
     <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
     <style>
-        body { margin: 0; padding: 0; }
+        body { margin: 0; padding: 0; background: #fafafa; }
         .swagger-ui .topbar { display: none; }
     </style>
 </head>
@@ -21,13 +21,9 @@
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [
-                    SwaggerUIBundle.presets.apis,
-                    SwaggerUIStandalonePreset
+                    SwaggerUIBundle.presets.apis
                 ],
-                plugins: [
-                    SwaggerUIBundle.plugins.DownloadUrl
-                ],
-                layout: "StandaloneLayout"
+                layout: "BaseLayout"
             });
         };
     </script>
