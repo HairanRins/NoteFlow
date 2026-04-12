@@ -24,4 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Swagger UI
+Route::get('/swagger', function () {
+    return view('swagger');
+})->name('swagger');
+
 require __DIR__.'/auth.php';
