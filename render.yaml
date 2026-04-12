@@ -2,6 +2,7 @@ services:
   - type: web
     name: noteflow-app
     env: php
+    rootDir: noteflow_app
     buildCommand: |
       composer install --optimize-autoloader --no-dev
       php artisan key:generate
