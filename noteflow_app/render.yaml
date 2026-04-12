@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: noteflow-app
+    env: php
+    buildCommand: |
+      composer install --optimize-autoloader --no-dev
+      php artisan key:generate
+      php artisan config:clear
+      php artisan view:cache
+      php artisan route:cache
+      php artisan scribe:generate
+    startCommand: 'php artisan serve --host=0.0.0.0 --port=$PORT'
+    envVars:
+      - key: APP_NAME
+        value: NoteFlow
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: noteflow-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: noteflow-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: noteflow-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: noteflow-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: noteflow-db
+          property: password
+      - key: CACHE_STORE
+        value: database
+      - key: SESSION_DRIVER
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: MAIL_MAILER
+        value: log
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: FILESYSTEM_DISK
+        value: public
+
+databases:
+  - name: noteflow-db
+    databaseName: noteflow
+    plan: free
