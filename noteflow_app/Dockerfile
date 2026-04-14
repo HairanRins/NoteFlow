@@ -1,3 +1,14 @@
+FROM node:20 AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+
 FROM php:8.4-fpm
 
 # Install system dependencies
@@ -25,6 +36,8 @@ WORKDIR /var/www/html
 
 # Copy app files
 COPY . .
+
+COPY --from=frontend /app/public/build ./public/build
 
 # 1. Create production .env with PostgreSQL settings
 # RUN echo "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')\nAPP_DEBUG=false\nAPP_URL=https://noteflow-orqw.onrender.com\nDB_CONNECTION=pgsql\nDB_URL=\${DATABASE_URL}\nDB_HOST=localhost\nDB_PORT=5432\nDB_DATABASE=noteflow\nDB_USERNAME=postgres\nDB_PASSWORD=\${DATABASE_PASSWORD}\nDB_SSLMODE=require\nLOG_CHANNEL=stderr\nLOG_LEVEL=error\nBCRYPT_ROUNDS=12\n" > .env
