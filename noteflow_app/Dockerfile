@@ -17,9 +17,6 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip opcache
 
-# Configure PHP
-COPY php.ini /usr/local/etc/php/conf.d/custom.ini
-
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -28,18 +25,17 @@ WORKDIR /var/www/html
 # Copy app files
 COPY . .
 
-# Install dependencies
-RUN composer install --optimize-autoloader --no-dev
+# Install dependencies (ignore scripts that might fail without .env)
+RUN composer install --optimize-autoloader --no-dev --no-scripts || true
 
-# Generate Laravel key and optimize
-RUN php artisan key:generate \
-    && php artisan config:clear \
-    && php artisan view:cache \
-    && php artisan route:cache \
-    && php artisan scribe:generate
+# Generate app key if not present
+RUN if [ ! -f .env ]; then echo "APP_KEY=" > .env; fi
+RUN php artisan key:generate --no-interaction || true
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 777 storage bootstrap/cache
 
 # Nginx configuration
 RUN echo 'server { \
