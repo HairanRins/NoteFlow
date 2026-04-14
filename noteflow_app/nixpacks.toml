@@ -1,0 +1,24 @@
+{
+  "$schema": "https://nixpacks.org/schema.json",
+  "phases": {
+    "setup": {
+      "nixPkgs": ["php83", "php83Packages.composer", "nginx"]
+    },
+    "install": {
+      "cmds": ["composer install --no-dev --optimize-autoloader"]
+    },
+    "build": {
+      "cmds": [
+        "php artisan key:generate",
+        "php artisan config:clear",
+        "php artisan view:cache",
+        "php artisan route:cache",
+        "mkdir -p storage/framework/{sessions,views,cache}",
+        "chmod -R 777 storage bootstrap/cache"
+      ]
+    }
+  },
+  "start": {
+    "cmd": "php artisan serve --host=0.0.0.0 --port=$PORT"
+  }
+}

@@ -1,9 +1,11 @@
 services:
   - type: web
     name: noteflow-app
-    env: docker
     rootDir: noteflow_app
-    dockerfilePath: Dockerfile
+    env: nixpacks
+    buildCommand: ""
+    startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
+    plan: free
     envVars:
       - key: APP_NAME
         value: NoteFlow
