@@ -26,8 +26,8 @@ WORKDIR /var/www/html
 # Copy app files
 COPY . .
 
-# 1. Create dummy .env to prevent build crashes during composer install
-RUN echo "APP_KEY=" > .env
+# 1. Create production .env with PostgreSQL settings
+RUN echo "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')\nAPP_DEBUG=false\nAPP_URL=https://noteflow-orqw.onrender.com\nDB_CONNECTION=pgsql\nDB_HOST=\${DATABASE_URL}\nDB_PORT=5432\nDB_DATABASE=\${DATABASE_URL}\nDB_USERNAME=\${DATABASE_URL}\nDB_PASSWORD=\${DATABASE_URL}\nLOG_CHANNEL=stderr\nLOG_LEVEL=error\nBCRYPT_ROUNDS=12\n" > .env
 
 # 2. Install Scribe for production documentation
 RUN composer require knuckleswtf/scribe --no-interaction
@@ -35,7 +35,7 @@ RUN composer require knuckleswtf/scribe --no-interaction
 # 3. Install dependencies WITHOUT scripts (scripts fail without real DB/.env)
 RUN composer install --optimize-autoloader --no-scripts
 
-# 4. Set permissions
+# 4. Set permissions for storage (PostgreSQL uses external DB)
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
