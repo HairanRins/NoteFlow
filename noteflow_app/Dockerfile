@@ -27,7 +27,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # 1. Create production .env with PostgreSQL settings
-RUN echo "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')\nAPP_DEBUG=false\nAPP_URL=https://noteflow-orqw.onrender.com\nDB_CONNECTION=pgsql\nDB_HOST=\${DATABASE_URL}\nDB_PORT=5432\nDB_DATABASE=\${DATABASE_URL}\nDB_USERNAME=\${DATABASE_URL}\nDB_PASSWORD=\${DATABASE_URL}\nLOG_CHANNEL=stderr\nLOG_LEVEL=error\nBCRYPT_ROUNDS=12\n" > .env
+RUN echo "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')\nAPP_DEBUG=false\nAPP_URL=https://noteflow-orqw.onrender.com\nDB_CONNECTION=pgsql\nDB_URL=\${DATABASE_URL}\nDB_HOST=localhost\nDB_PORT=5432\nDB_DATABASE=noteflow\nDB_USERNAME=postgres\nDB_PASSWORD=\${DATABASE_PASSWORD}\nLOG_CHANNEL=stderr\nLOG_LEVEL=error\nBCRYPT_ROUNDS=12\n" > .env
 
 # 2. Install Scribe for production documentation
 RUN composer require knuckleswtf/scribe --no-interaction
@@ -40,9 +40,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# 5. Create Startup Script (Run Migrations then Start Server)
-# This runs every time the container starts, ensuring DB is up to date.
-RUN printf '#!/bin/bash\necho "Running Migrations..."\nphp artisan migrate --force || echo "Migration skipped"\necho "Generating Docs..."\nphp artisan scribe:generate || echo "Docs skipped"\necho "Starting Supervisor..."\n/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n' > /start.sh \
+# 5. Create Startup Script that parses DATABASE_URL for Laravel
+RUN printf '#!/bin/bash\n# Parse DATABASE_URL for Laravel if it exists\nif [ ! -z "$DATABASE_URL" ]; then\n    # Extract components from DATABASE_URL\n    # Format: postgres://user:password@host:port/database\n    DB_HOST=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@\\([^:]*\\):.*/\\1/p")\n    DB_PORT=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@[^:]*:\\([0-9]*\\)\\/.*/\\1/p")\n    DB_NAME=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@[^:]*:[0-9]*\\/\\([^?]*\\).*/\\1/p")\n    DB_USER=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/\\([^:]*\\):.*/\\1/p")\n    DB_PASS=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^:]*:\\([^@]*\\)@.*/\\1/p")\n    \n    # Update Laravel .env with parsed values\n    sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env\n    sed -i "s/DB_PORT=.*/DB_PORT=$DB_PORT/" .env\n    sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" .env\n    sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USER/" .env\n    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" .env\n    \n    echo "Database configured: $DB_HOST:$DB_PORT/$DB_NAME"\nfi\n\necho "Running Migrations..."\nphp artisan migrate --force || echo "Migration skipped"\necho "Generating Docs..."\nphp artisan scribe:generate || echo "Docs skipped"\necho "Starting Supervisor..."\n/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n' > /start.sh \
     && chmod +x /start.sh
 
 # 6. Nginx configuration
