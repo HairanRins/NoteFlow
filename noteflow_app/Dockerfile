@@ -1,3 +1,29 @@
+# Stage 1: Install PHP dependencies first (needed for Ziggy JS bridge)
+FROM php:8.4-fpm AS php-deps
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip opcache
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-scripts --no-dev
+
+# Stage 2: Build frontend assets
 FROM node:20 AS frontend
 
 WORKDIR /app
@@ -6,9 +32,12 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+# Copy vendor from PHP deps stage (includes tightenco/ziggy)
+COPY --from=php-deps /app/vendor ./vendor
+
 RUN npm run build
 
-
+# Stage 3: Production PHP image
 FROM php:8.4-fpm
 
 # Install system dependencies
@@ -34,9 +63,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy app files
+# Copy app files (excluding vendor and node_modules via .dockerignore)
 COPY . .
 
+# Copy vendor from php-deps stage
+COPY --from=php-deps /app/vendor ./vendor
+
+# Copy built frontend assets
 COPY --from=frontend /app/public/build ./public/build
 
 # 1. Create production .env with PostgreSQL settings
