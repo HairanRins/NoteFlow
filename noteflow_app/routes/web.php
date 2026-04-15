@@ -30,6 +30,65 @@ Route::get('/swagger', function () {
     return view('swagger');
 })->name('swagger');
 
+// Fallback OpenAPI spec generator
+Route::get('/docs.openapi.yaml', function () {
+    $baseUrl = env('APP_URL', 'https://noteflow-orqw.onrender.com');
+    
+    $yaml = "openapi: 3.0.0
+info:
+  title: NoteFlow API
+  version: 1.0.0
+  description: API documentation for NoteFlow application
+servers:
+  - url: {$baseUrl}
+paths:
+  /api/health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+  /api/auth/login:
+    post:
+      summary: User login
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials
+  /api/auth/register:
+    post:
+      summary: User registration
+      responses:
+        '201':
+          description: User created successfully
+        '422':
+          description: Validation error
+  /api/user/profile:
+    get:
+      summary: Get user profile
+      responses:
+        '200':
+          description: Profile data
+        '401':
+          description: Unauthorized";
+    
+    return response($yaml, 200, ['Content-Type' => 'text/yaml']);
+});
+
+Route::get('/docs/openapi.yaml', function () {
+    return redirect('/docs.openapi.yaml');
+});
+
 // Debug route to check Scribe files
 Route::get('/debug/docs', function () {
     $docsPath = public_path('docs');

@@ -68,14 +68,33 @@
     <script>
         window.onload = async () => {
             try {
-                // First try to fetch the OpenAPI spec to check if it exists
-                const response = await fetch('/docs.openapi.yaml');
+                // Try different possible OpenAPI spec locations
+                let specUrl = '/docs.openapi.yaml';
+                let response = await fetch(specUrl);
+                
                 if (!response.ok) {
-                    throw new Error(`OpenAPI spec not found: ${response.status}`);
+                    // Try alternative locations
+                    const alternatives = [
+                        '/docs/openapi.yaml',
+                        '/docs.openapi.json',
+                        '/docs/openapi.json'
+                    ];
+                    
+                    for (const altUrl of alternatives) {
+                        response = await fetch(altUrl);
+                        if (response.ok) {
+                            specUrl = altUrl;
+                            break;
+                        }
+                    }
+                    
+                    if (!response.ok) {
+                        throw new Error(`OpenAPI spec not found at any location`);
+                    }
                 }
                 
                 const ui = SwaggerUIBundle({
-                    url: '/docs.openapi.yaml',
+                    url: specUrl,
                     dom_id: '#swagger-ui',
                     deepLinking: true,
                     presets: [
