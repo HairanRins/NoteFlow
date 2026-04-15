@@ -69,7 +69,7 @@
         window.onload = async () => {
             try {
                 const ui = SwaggerUIBundle({
-                    url: '/docs.openapi',
+                    url: '/docs.openapi.yaml',
                     dom_id: '#swagger-ui',
                     deepLinking: true,
                     presets: [
