@@ -36,6 +36,9 @@ COPY . .
 # Copy vendor from PHP deps stage (includes tightenco/ziggy)
 COPY --from=php-deps /app/vendor ./vendor
 
+# Create a minimal .env for Vite build (needed for Ziggy routes)
+RUN printf "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:dGVzdGtleXRlc3RrZXl0ZXN0a2V5dGVzdGtleXRlc3Q=\nAPP_DEBUG=false\nAPP_URL=http://localhost\nDB_CONNECTION=sqlite\n" > .env
+
 RUN npm run build
 
 # Stage 3: Production PHP image
@@ -70,38 +73,32 @@ COPY . .
 # Copy vendor from php-deps stage
 COPY --from=php-deps /app/vendor ./vendor
 
-# Copy built frontend assets
+# Copy built frontend assets (from Vite build)
 COPY --from=frontend /app/public/build ./public/build
 
-# 1. Create production .env with PostgreSQL settings
-# RUN echo "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')\nAPP_DEBUG=false\nAPP_URL=https://noteflow-orqw.onrender.com\nDB_CONNECTION=pgsql\nDB_URL=\${DATABASE_URL}\nDB_HOST=localhost\nDB_PORT=5432\nDB_DATABASE=noteflow\nDB_USERNAME=postgres\nDB_PASSWORD=\${DATABASE_PASSWORD}\nDB_SSLMODE=require\nLOG_CHANNEL=stderr\nLOG_LEVEL=error\nBCRYPT_ROUNDS=12\n" > .env
+# Install Scribe for production documentation
+RUN composer require knuckleswtf/scribe --no-interaction --no-scripts
 
-# 2. Install Scribe for production documentation
-RUN composer require knuckleswtf/scribe --no-interaction
-
-# 3. Install dependencies WITHOUT scripts (scripts fail without real DB/.env)
+# Install dependencies WITHOUT scripts (scripts fail without real DB/.env)
 RUN composer install --optimize-autoloader --no-scripts
 
-# 4. Set permissions for storage (PostgreSQL uses external DB)
+# Set permissions for storage (PostgreSQL uses external DB)
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# 5. Publish Scribe assets to public folder
-RUN php artisan vendor:publish --provider="Knuckles\\Scribe\\ScribeServiceProvider" --tag="scribe-assets" --force || echo "Scribe assets publish skipped"
-
-# 5. Create Startup Script that uses Render env vars directly
-RUN printf '#!/bin/bash\necho "=== NoteFlow Startup ==="\n\n# Generate APP_KEY if not set\nif [ -z "$APP_KEY" ]; then\n    APP_KEY=$(php -r "echo base64_encode(random_bytes(32));")\n    sed -i "s/APP_KEY=.*/APP_KEY=base64:$APP_KEY/" .env\n    echo "Generated new APP_KEY"\nelse\n    echo "Using existing APP_KEY"\nfi\n\n# Set production values\nsed -i "s/APP_ENV=.*/APP_ENV=production/" .env\nsed -i "s/APP_DEBUG=.*/APP_DEBUG=false/" .env\nsed -i "s/LOG_CHANNEL=.*/LOG_CHANNEL=stderr/" .env\nsed -i "s/LOG_LEVEL=.*/LOG_LEVEL=error/" .env\n\n# Clear and cache configurations\nphp artisan config:clear || echo "Config clear skipped"\nphp artisan route:clear || echo "Route clear skipped"\nphp artisan view:clear || echo "View clear skipped"\nphp artisan config:cache || echo "Config cache skipped"\nphp artisan route:cache || echo "Route cache skipped"\n\n# Override .env values with environment variables from Render (if set)\nif [ ! -z "$DB_HOST" ]; then\n    sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env\nfi\nif [ ! -z "$DB_PORT" ]; then\n    sed -i "s/DB_PORT=.*/DB_PORT=$DB_PORT/" .env\nfi\nif [ ! -z "$DB_DATABASE" ]; then\n    sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_DATABASE/" .env\nfi\nif [ ! -z "$DB_USERNAME" ]; then\n    sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env\nfi\nif [ ! -z "$DB_PASSWORD" ]; then\n    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env\nfi\n\n# Also support DATABASE_URL format as fallback\nif [ ! -z "$DATABASE_URL" ] && [ -z "$DB_HOST" ]; then\n    DB_HOST=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@\\([^:]*\\):.*/\\1/p")\n    DB_PORT=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@[^:]*:\\([0-9]*\\)\\/.*/\\1/p")\n    DB_NAME=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^@]*@[^:]*:[0-9]*\\/\\([^?]*\\).*/\\1/p")\n    DB_USER=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/\\([^:]*\\):.*/\\1/p")\n    DB_PASS=$(echo $DATABASE_URL | sed -n "s/^postgres:\\/\\/[^:]*:\\([^@]*\\)@.*/\\1/p")\n    sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env\n    sed -i "s/DB_PORT=.*/DB_PORT=$DB_PORT/" .env\n    sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" .env\n    sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USER/" .env\n    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" .env\n    echo "Database configured from DATABASE_URL: $DB_HOST:$DB_PORT/$DB_NAME"\nelse\n    echo "Database configured from env vars: $DB_HOST:$DB_PORT/$DB_DATABASE"\nfi\n\necho "Running Migrations..."\nphp artisan migrate --force || echo "Migration failed but continuing..."\necho "Generating API Docs..."\nphp artisan scribe:generate --verbose || echo "Docs generation failed but continuing..."\necho "Starting Supervisor..."\n/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n' > /start.sh \
+# Create Startup Script that uses Render env vars directly
+RUN printf '#!/bin/bash\nset -e\n\necho "=== NoteFlow Startup ==="\n\n# Generate APP_KEY if not set\nif [ -z "$APP_KEY" ]; then\n    export APP_KEY="base64:$(php -r \"echo base64_encode(random_bytes(32));\")"\n    echo "Generated new APP_KEY"\nelse\n    echo "Using existing APP_KEY"\nfi\n\n# Write complete .env from environment variables (no sed replacements)\ncat > .env << ENVEOF\nAPP_NAME=${APP_NAME:-NoteFlow}\nAPP_ENV=${APP_ENV:-production}\nAPP_KEY=${APP_KEY}\nAPP_DEBUG=${APP_DEBUG:-false}\nAPP_URL=${APP_URL:-https://noteflow-orqw.onrender.com}\nDB_CONNECTION=${DB_CONNECTION:-pgsql}\nDB_HOST=${DB_HOST:-localhost}\nDB_PORT=${DB_PORT:-5432}\nDB_DATABASE=${DB_DATABASE:-noteflow}\nDB_USERNAME=${DB_USERNAME:-postgres}\nDB_PASSWORD=${DB_PASSWORD:-}\nLOG_CHANNEL=${LOG_CHANNEL:-stderr}\nLOG_LEVEL=${LOG_LEVEL:-error}\nCACHE_DRIVER=${CACHE_DRIVER:-file}\nSESSION_DRIVER=${SESSION_DRIVER:-file}\nQUEUE_CONNECTION=${QUEUE_CONNECTION:-sync}\nENVEOF\n\necho ".env written successfully"\ncat .env | grep -v "APP_KEY\\|DB_PASSWORD" | grep "="\n\n# Clear and cache configurations\nphp artisan config:clear\nphp artisan route:clear\nphp artisan view:clear\nphp artisan config:cache\nphp artisan route:cache\n\necho "Publishing Scribe assets..."\nphp artisan vendor:publish --provider="Knuckles\\\\Scribe\\\\ScribeServiceProvider" --tag="scribe-assets" --force || echo "Scribe assets publish failed but continuing..."\n\necho "Running Migrations..."\nphp artisan migrate --force || echo "Migration failed but continuing..."\necho "Generating API Docs..."\nphp artisan scribe:generate --force || echo "Docs generation failed but continuing..."\necho "Starting Supervisor..."\n/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n' > /start.sh \
     && chmod +x /start.sh
 
-# 6. Nginx configuration
-RUN printf 'server {\n    listen 80;\n    root /var/www/html/public;\n    index index.php;\n    location / {\n        try_files $uri $uri/ /index.php?$query_string;\n    }\n    location ~ \.php$ {\n        fastcgi_pass 127.0.0.1:9000;\n        fastcgi_index index.php;\n        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n        include fastcgi_params;\n    }\n}\n' > /etc/nginx/sites-available/default
+# Nginx configuration
+RUN printf 'server {\n    listen 80;\n    root /var/www/html/public;\n    index index.php index.html;\n\n    location / {\n        try_files $uri $uri/ /index.php?$query_string;\n    }\n\n    location ~ \.php$ {\n        fastcgi_pass 127.0.0.1:9000;\n        fastcgi_index index.php;\n        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n        include fastcgi_params;\n    }\n\n    # Cache static assets\n    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$ {\n        expires 1y;\n        add_header Cache-Control "public, immutable";\n    }\n}\n' > /etc/nginx/sites-available/default
 
-# 7. Supervisor config
-RUN printf '[supervisord]\nnodaemon=true\n\n[program:php-fpm]\ncommand=php-fpm\nautorestart=true\n\n[program:nginx]\ncommand=nginx -g "daemon off;"\nautorestart=true\n' > /etc/supervisor/conf.d/supervisord.conf
+# Supervisor config
+RUN printf '[supervisord]\nnodaemon=true\n\n[program:php-fpm]\ncommand=php-fpm -F\nautorestart=true\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0\n\n[program:nginx]\ncommand=nginx -g "daemon off;"\nautorestart=true\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0\n' > /etc/supervisor/conf.d/supervisord.conf
 
 # Expose port 80
 EXPOSE 80
 
-# 8. Run the startup script
+# Run the startup script
 CMD ["/start.sh"]
