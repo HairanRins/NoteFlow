@@ -68,6 +68,12 @@
     <script>
         window.onload = async () => {
             try {
+                // First try to fetch the OpenAPI spec to check if it exists
+                const response = await fetch('/docs.openapi.yaml');
+                if (!response.ok) {
+                    throw new Error(`OpenAPI spec not found: ${response.status}`);
+                }
+                
                 const ui = SwaggerUIBundle({
                     url: '/docs.openapi.yaml',
                     dom_id: '#swagger-ui',

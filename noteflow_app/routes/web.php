@@ -6,22 +6,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    try {
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-        ]);
-    } catch (\Exception $e) {
-        // Fallback if Inertia fails
-        return response()->view('welcome-fallback', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-        ]);
-    }
+    // Force fallback for now to avoid blank page
+    return response()->view('welcome-fallback', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -38,6 +29,35 @@ Route::middleware('auth')->group(function () {
 Route::get('/swagger', function () {
     return view('swagger');
 })->name('swagger');
+
+// Debug route to check Scribe files
+Route::get('/debug/docs', function () {
+    $docsPath = public_path('docs');
+    $files = [];
+    
+    if (is_dir($docsPath)) {
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($docsPath));
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $relativePath = str_replace($docsPath . '/', '', $file->getPathname());
+                $files[] = [
+                    'path' => $relativePath,
+                    'size' => $file->getSize(),
+                    'modified' => $file->getMTime(),
+                    'exists' => true
+                ];
+            }
+        }
+    }
+    
+    return response()->json([
+        'docs_path' => $docsPath,
+        'exists' => is_dir($docsPath),
+        'files' => $files,
+        'public_path' => public_path(),
+        'storage_docs' => storage_path('app/scribe')
+    ]);
+});
 
 // Serve static Scribe docs (if using static type)
 Route::get('/docs/{file?}', function ($file = 'index.html') {
