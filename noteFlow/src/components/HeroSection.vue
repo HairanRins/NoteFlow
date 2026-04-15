@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import heroImg from '../assets/images/NoteFlow.png'
-
-const count = ref(0)
 </script>
 
 <template>
