@@ -32,8 +32,6 @@ storage/logs/*
 coverage/
 
 # Docker
-Dockerfile
-.dockerignore
 docker-compose*.yml
 
 # OS
