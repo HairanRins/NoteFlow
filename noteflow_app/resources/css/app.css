@@ -1,3 +1,507 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: dark;
+        --nf-bg: #0f1115;
+        --nf-surface: #1a1d24;
+        --nf-surface-alt: #151820;
+        --nf-border: #2a2f3a;
+        --nf-border-strong: #3a4150;
+        --nf-text: #e6eaf2;
+        --nf-text-secondary: #9aa4b2;
+        --nf-text-muted: #6b7280;
+        --nf-accent: #7c5cff;
+        --nf-accent-soft: rgba(124, 92, 255, 0.16);
+        --nf-danger: #ff6b81;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background:
+            radial-gradient(circle at top right, rgba(124, 92, 255, 0.18), transparent 25%),
+            radial-gradient(circle at bottom left, rgba(34, 211, 238, 0.08), transparent 20%),
+            var(--nf-bg);
+        color: var(--nf-text);
+    }
+
+    button,
+    input,
+    textarea {
+        font: inherit;
+    }
+
+    kbd,
+    code,
+    pre {
+        font-family: "JetBrains Mono", monospace;
+    }
+}
+
+@layer components {
+    .nf-shell {
+        display: grid;
+        min-height: 100vh;
+        grid-template-columns: 280px 1fr;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+    }
+
+    .nf-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        border-right: 1px solid var(--nf-border);
+        background: rgba(17, 19, 25, 0.84);
+        padding: 1.5rem;
+        backdrop-filter: blur(18px);
+    }
+
+    .nf-brand,
+    .nf-section,
+    .nf-list-panel,
+    .nf-editor-panel,
+    .nf-context-panel,
+    .nf-modal {
+        border: 1px solid var(--nf-border);
+        background: rgba(26, 29, 36, 0.88);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+    }
+
+    .nf-brand,
+    .nf-section,
+    .nf-modal {
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    .nf-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nf-eyebrow {
+        margin: 0 0 0.35rem;
+        color: var(--nf-text-muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .nf-brand h1,
+    .nf-topbar h2,
+    .nf-section-head h2 {
+        margin: 0;
+    }
+
+    .nf-primary-button,
+    .nf-ghost-button,
+    .nf-danger-button,
+    .nf-text-button,
+    .nf-chip,
+    .nf-note-item,
+    .nf-list-card,
+    .nf-context-card {
+        cursor: pointer;
+        border: 0;
+        transition: 140ms ease;
+    }
+
+    .nf-primary-button,
+    .nf-ghost-button,
+    .nf-danger-button {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+    }
+
+    .nf-primary-button {
+        background: var(--nf-accent);
+        color: white;
+        font-weight: 600;
+    }
+
+    .nf-ghost-button {
+        border: 1px solid var(--nf-border);
+        background: transparent;
+        color: var(--nf-text);
+    }
+
+    .nf-danger-button {
+        background: rgba(255, 107, 129, 0.12);
+        color: #ffc1cb;
+    }
+
+    .nf-text-button {
+        background: transparent;
+        color: var(--nf-text-secondary);
+        padding: 0;
+    }
+
+    .nf-search {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        color: var(--nf-text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .nf-search input,
+    .nf-title-input,
+    .nf-editor,
+    .nf-capture-input {
+        width: 100%;
+        border: 1px solid var(--nf-border);
+        border-radius: 14px;
+        background: var(--nf-surface-alt);
+        color: var(--nf-text);
+        outline: none;
+    }
+
+    .nf-search input,
+    .nf-title-input {
+        padding: 0.85rem 1rem;
+    }
+
+    .nf-search input:focus,
+    .nf-title-input:focus,
+    .nf-editor:focus,
+    .nf-capture-input:focus {
+        border-color: var(--nf-accent);
+        box-shadow: 0 0 0 4px var(--nf-accent-soft);
+    }
+
+    .nf-main {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .nf-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        border: 1px solid var(--nf-border);
+        border-radius: 24px;
+        background: rgba(26, 29, 36, 0.76);
+        padding: 1.1rem 1.25rem;
+        backdrop-filter: blur(16px);
+    }
+
+    .nf-topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .nf-status {
+        border-radius: 999px;
+        padding: 0.55rem 0.85rem;
+        background: var(--nf-surface);
+        color: var(--nf-text-secondary);
+        text-align: right;
+    }
+
+    .nf-status span,
+    .nf-status small {
+        display: block;
+    }
+
+    .nf-status.is-ready span {
+        color: #b8ffdb;
+    }
+
+    .nf-status.is-syncing span {
+        color: #d7ccff;
+    }
+
+    .nf-status.is-error span {
+        color: #ffc1cb;
+    }
+
+    .nf-status.is-offline span {
+        color: #ffd280;
+    }
+
+    .nf-workspace {
+        display: grid;
+        min-height: 0;
+        grid-template-columns: 320px minmax(0, 1fr) 280px;
+        gap: 1rem;
+        flex: 1;
+    }
+
+    .nf-notes-panel,
+    .nf-editor-panel,
+    .nf-context-panel {
+        min-height: 0;
+    }
+
+    .nf-notes-panel,
+    .nf-context-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nf-list-panel,
+    .nf-editor-panel,
+    .nf-context-panel {
+        border-radius: 24px;
+        padding: 1rem;
+    }
+
+    .nf-list-panel {
+        display: flex;
+        min-height: 0;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow: auto;
+    }
+
+    .nf-section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+        color: var(--nf-text-secondary);
+    }
+
+    .nf-note-item,
+    .nf-list-card,
+    .nf-context-card {
+        width: 100%;
+        border: 1px solid var(--nf-border);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        color: inherit;
+        text-align: left;
+    }
+
+    .nf-note-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        padding: 0.8rem 0.9rem;
+    }
+
+    .nf-list-card {
+        padding: 1rem;
+    }
+
+    .nf-list-card p,
+    .nf-muted {
+        color: var(--nf-text-secondary);
+    }
+
+    .nf-note-item:hover,
+    .nf-list-card:hover,
+    .nf-context-card:hover,
+    .nf-chip:hover,
+    .nf-primary-button:hover,
+    .nf-ghost-button:hover,
+    .nf-danger-button:hover {
+        transform: translateY(-1px);
+        border-color: var(--nf-border-strong);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nf-note-item.is-active,
+    .nf-list-card.is-active,
+    .nf-chip.is-active {
+        border-color: rgba(124, 92, 255, 0.8);
+        background: var(--nf-accent-soft);
+    }
+
+    .nf-tag-grid,
+    .nf-inline-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .nf-chip {
+        border-radius: 999px;
+        padding: 0.45rem 0.8rem;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--nf-text-secondary);
+    }
+
+    .nf-chip span {
+        color: var(--nf-text-muted);
+    }
+
+    .nf-editor-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nf-editor-header,
+    .nf-meta-row,
+    .nf-modal-actions,
+    .nf-list-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .nf-title-input {
+        border: 0;
+        background: transparent;
+        padding-left: 0;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .nf-meta-row {
+        color: var(--nf-text-muted);
+        font-size: 0.85rem;
+    }
+
+    .nf-editor-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1rem;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .nf-editor,
+    .nf-preview,
+    .nf-capture-input {
+        min-height: 100%;
+        padding: 1rem;
+    }
+
+    .nf-editor,
+    .nf-capture-input {
+        resize: none;
+        min-height: 460px;
+        border-radius: 18px;
+        line-height: 1.7;
+    }
+
+    .nf-preview {
+        overflow: auto;
+        border: 1px solid var(--nf-border);
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.05), transparent 20%), var(--nf-surface-alt);
+    }
+
+    .nf-preview p,
+    .nf-preview li {
+        color: var(--nf-text-secondary);
+    }
+
+    .nf-link {
+        color: #d3c7ff;
+    }
+
+    .nf-tag {
+        color: #7ee8f7;
+    }
+
+    .nf-code {
+        overflow: auto;
+        border: 1px solid var(--nf-border);
+        border-radius: 12px;
+        background: #111318;
+        padding: 0.9rem;
+    }
+
+    .nf-list {
+        padding-left: 1.25rem;
+    }
+
+    .nf-context-list,
+    .nf-hints {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .nf-context-card {
+        padding: 0.9rem;
+    }
+
+    .nf-context-card small {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--nf-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .nf-empty-state {
+        display: grid;
+        flex: 1;
+        place-items: center;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .nf-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(5, 7, 11, 0.62);
+        padding: 1rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .nf-modal {
+        width: min(680px, 100%);
+        border-radius: 28px;
+    }
+
+    .nf-capture-input {
+        min-height: 220px;
+        margin: 1rem 0;
+    }
+
+    @media (max-width: 1200px) {
+        .nf-workspace {
+            grid-template-columns: 280px minmax(0, 1fr);
+        }
+
+        .nf-context-panel {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @media (max-width: 920px) {
+        .nf-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .nf-sidebar {
+            border-right: 0;
+            border-bottom: 1px solid var(--nf-border);
+        }
+
+        .nf-workspace,
+        .nf-editor-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .nf-topbar,
+        .nf-topbar-actions,
+        .nf-editor-header,
+        .nf-meta-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+}

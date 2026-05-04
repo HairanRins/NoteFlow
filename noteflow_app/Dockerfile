@@ -37,7 +37,7 @@ COPY . .
 COPY --from=php-deps /app/vendor ./vendor
 
 # Create a minimal .env for Vite build (needed for Ziggy routes)
-RUN printf "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:dGVzdGtleXRlc3RrZXl0ZXN0a2V5dGVzdGtleXRlc3Q=\nAPP_DEBUG=false\nAPP_URL=http://localhost\nDB_CONNECTION=sqlite\n" > .env
+RUN printf "APP_NAME=NoteFlow\nAPP_ENV=production\nAPP_KEY=base64:dGVzdGtleXRlc3RrZXl0ZXN0a2V5dGVzdGtleXRlc3Q=\nAPP_DEBUG=false\nAPP_URL=http://localhost\nDB_CONNECTION=pgsql\nDB_HOST=127.0.0.1\nDB_PORT=5432\nDB_DATABASE=noteflow\nDB_USERNAME=postgres\nDB_PASSWORD=postgres\nDB_SCHEMA=public\nDB_SSLMODE=disable\n" > .env
 
 RUN npm run build
 

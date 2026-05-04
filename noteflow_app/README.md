@@ -1,46 +1,28 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# NoteFlow
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application Laravel avec front Inertia/Vue.
 
-## About Laravel
+## Stack retenue
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel pour l'application.
+- Supabase utilisé uniquement comme base PostgreSQL distante.
+- Aucun SDK Supabase n'est requis côté application si l'usage reste strictement SQL.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Configuration rapide
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Copier `.env.example` vers `.env`.
+2. Renseigner les variables PostgreSQL fournies par Supabase.
+3. Générer la clé et lancer les migrations.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
----
-
-This means Scribe automatically creates a route at `http://localhost/docs` when the Laravel app is running.
-**Additional available routes:**
-
-* `/docs` → HTML documentation page
-* `/docs.postman` → Postman collection
-* `/docs.openapi` → OpenAPI specification
-
-**To generate/update the documentation**, run:
-
-```
-php artisan scribe:generate
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
 ```
 
-The documentation is using the `laravel` type (not static), which means it renders the Blade view at `resources/views/scribe/index.blade.php dynamically`.
+## Documentation
 
-`http://127.0.0.1:8000/swagger` — you’ll get the classic Swagger UI with the green/white theme, rendering the OpenAPI spec from `/docs.openapi`.
-
+- Procédure complète : [docs/SUPABASE_POSTGRES_SETUP.md](/home/rins/Projects/NoteFlow/noteflow_app/docs/SUPABASE_POSTGRES_SETUP.md)
+- Architecture Inertia + API : [docs/INERTIA_API_ARCHITECTURE.md](/home/rins/Projects/NoteFlow/noteflow_app/docs/INERTIA_API_ARCHITECTURE.md)
+- Documentation API Scribe : `/docs`
+- Spécification OpenAPI : `/docs.openapi`
