@@ -21,7 +21,7 @@ L'application suit une separation simple :
 
 ## Point d'entree web
 
-Les pages web sont definies dans [routes/web.php](/home/rins/Projects/NoteFlow/noteflow_app/routes/web.php).
+Les pages web sont definies dans [routes/web.php](/NoteFlow/noteflow_app/routes/web.php).
 
 Routes principales :
 
@@ -30,11 +30,11 @@ Routes principales :
 
 Cette page est rendue par :
 
-- [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 Le template racine Inertia est :
 
-- [resources/views/app.blade.php](/home/rins/Projects/NoteFlow/noteflow_app/resources/views/app.blade.php)
+- [resources/views/app.blade.php](/NoteFlow/noteflow_app/resources/views/app.blade.php)
 
 ## Pages Inertia utiles
 
@@ -42,7 +42,7 @@ Le template racine Inertia est :
 
 Fichier :
 
-- [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 Role :
 
@@ -59,13 +59,13 @@ Composants UX dans cette page :
 
 ## APIs consommees par la page Inertia
 
-Les endpoints sont definis dans [routes/api.php](/home/rins/Projects/NoteFlow/noteflow_app/routes/api.php).
+Les endpoints sont definis dans [routes/api.php](/NoteFlow/noteflow_app/routes/api.php).
 
 ### `GET /api/workspace`
 
 Controleur :
 
-- [app/Http/Controllers/Api/WorkspaceController.php](/home/rins/Projects/NoteFlow/noteflow_app/app/Http/Controllers/Api/WorkspaceController.php)
+- [app/Http/Controllers/Api/WorkspaceController.php](/NoteFlow/noteflow_app/app/Http/Controllers/Api/WorkspaceController.php)
 
 Usage frontend :
 
@@ -75,8 +75,8 @@ Usage frontend :
 
 Consomme par :
 
-- `refreshWorkspace()` dans [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
-- `flushSyncQueue()` dans [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- `refreshWorkspace()` dans [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- `flushSyncQueue()` dans [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 Retour attendu :
 
@@ -88,7 +88,7 @@ Retour attendu :
 
 Controleur :
 
-- [app/Http/Controllers/Api/SyncController.php](/home/rins/Projects/NoteFlow/noteflow_app/app/Http/Controllers/Api/SyncController.php)
+- [app/Http/Controllers/Api/SyncController.php](/NoteFlow/noteflow_app/app/Http/Controllers/Api/SyncController.php)
 
 Usage frontend :
 
@@ -98,7 +98,7 @@ Usage frontend :
 
 Consomme par :
 
-- `flushSyncQueue()` dans [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- `flushSyncQueue()` dans [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 Payload :
 
@@ -121,7 +121,7 @@ Payload :
 
 Controleur :
 
-- [app/Http/Controllers/Api/NoteController.php](/home/rins/Projects/NoteFlow/noteflow_app/app/Http/Controllers/Api/NoteController.php)
+- [app/Http/Controllers/Api/NoteController.php](/NoteFlow/noteflow_app/app/Http/Controllers/Api/NoteController.php)
 
 Usage prevu :
 
@@ -163,8 +163,8 @@ Au montage :
 
 Code implique :
 
-- [resources/js/lib/indexedDb.js](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/lib/indexedDb.js)
-- [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- [resources/js/lib/indexedDb.js](/NoteFlow/noteflow_app/resources/js/lib/indexedDb.js)
+- [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 ### 2. Edition d'une note
 
@@ -206,7 +206,7 @@ Quand le navigateur repasse online :
 
 Le coeur metier est centralise dans :
 
-- [app/Services/NoteGraphService.php](/home/rins/Projects/NoteFlow/noteflow_app/app/Services/NoteGraphService.php)
+- [app/Services/NoteGraphService.php](/NoteFlow/noteflow_app/app/Services/NoteGraphService.php)
 
 Ce service :
 
@@ -227,17 +227,17 @@ Tables principales :
 
 Migration :
 
-- [database/migrations/2026_05_04_000000_create_notes_tables.php](/home/rins/Projects/NoteFlow/noteflow_app/database/migrations/2026_05_04_000000_create_notes_tables.php)
+- [database/migrations/2026_05_04_000000_create_notes_tables.php](/NoteFlow/noteflow_app/database/migrations/2026_05_04_000000_create_notes_tables.php)
 
 ## Fichiers frontend importants
 
 ### Page
 
-- [resources/js/Pages/Dashboard.vue](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
+- [resources/js/Pages/Dashboard.vue](/NoteFlow/noteflow_app/resources/js/Pages/Dashboard.vue)
 
 ### Stockage local
 
-- [resources/js/lib/indexedDb.js](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/lib/indexedDb.js)
+- [resources/js/lib/indexedDb.js](/NoteFlow/noteflow_app/resources/js/lib/indexedDb.js)
 
 Responsabilites :
 
@@ -247,7 +247,7 @@ Responsabilites :
 
 ### Rendu Markdown
 
-- [resources/js/lib/markdown.js](/home/rins/Projects/NoteFlow/noteflow_app/resources/js/lib/markdown.js)
+- [resources/js/lib/markdown.js](/NoteFlow/noteflow_app/resources/js/lib/markdown.js)
 
 Responsabilites :
 
@@ -256,7 +256,7 @@ Responsabilites :
 
 ### Style
 
-- [resources/css/app.css](/home/rins/Projects/NoteFlow/noteflow_app/resources/css/app.css)
+- [resources/css/app.css](/NoteFlow/noteflow_app/resources/css/app.css)
 
 Responsabilites :
 
