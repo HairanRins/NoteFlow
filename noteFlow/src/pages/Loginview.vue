@@ -1,15 +1,34 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { api, setToken } from '@/utils/api'
 import TheFooter from '@/components/layout/Footer.vue'
 
+const router = useRouter()
 const form = ref({
   email:    '',
   password: '',
 })
+const loading = ref(false)
+const error = ref('')
 
-function handleSubmit() {
-  // TODO: brancher sur l'API d'authentification
-  console.log('Connexion :', form.value)
+async function handleSubmit() {
+  error.value = ''
+  loading.value = true
+
+  const { data, error: err } = await api.login(form.value.email, form.value.password)
+
+  loading.value = false
+
+  if (err) {
+    error.value = err
+    return
+  }
+
+  if (data) {
+    setToken(data.token)
+    router.push('/')
+  }
 }
 </script>
 
@@ -64,6 +83,14 @@ function handleSubmit() {
           </div>
 
           <form class="space-y-6" @submit.prevent="handleSubmit">
+            <!-- Error message -->
+            <div
+              v-if="error"
+              class="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-md"
+            >
+              {{ error }}
+            </div>
+
             <!-- Adresse e-mail -->
             <div class="space-y-2">
               <label
@@ -120,12 +147,14 @@ function handleSubmit() {
             <div class="pt-4">
               <button
                 type="submit"
+                :disabled="loading"
                 class="w-full py-4 rounded-lg bg-gradient-to-br from-primary
                        to-primary-container text-on-primary font-headline
                        font-bold text-sm tracking-wide shadow-lg shadow-primary/10
-                       active:scale-[0.98] transition-all duration-150"
+                       active:scale-[0.98] transition-all duration-150
+                       disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Se connecter
+                {{ loading ? 'Connexion...' : 'Se connecter' }}
               </button>
             </div>
           </form>

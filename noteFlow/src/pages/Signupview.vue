@@ -1,13 +1,19 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { api, setToken } from '@/utils/api'
 import TheFooter from '@/components/layout/Footer.vue'
 
+const router = useRouter()
 const form = ref({
   name:     '',
   email:    '',
   password: '',
+  password_confirmation: '',
   avatar:   null,
 })
+const loading = ref(false)
+const error = ref('')
 
 const features = [
   {
@@ -33,9 +39,28 @@ function handleAvatarUpload(event) {
   }
 }
 
-function handleSubmit() {
-  // TODO: brancher sur l'API d'authentification
-  console.log('Inscription :', form.value)
+async function handleSubmit() {
+  error.value = ''
+  loading.value = true
+
+  const { data, error: err } = await api.register(
+    form.value.name,
+    form.value.email,
+    form.value.password,
+    form.value.password_confirmation,
+  )
+
+  loading.value = false
+
+  if (err) {
+    error.value = err
+    return
+  }
+
+  if (data) {
+    setToken(data.token)
+    router.push('/')
+  }
 }
 </script>
 
@@ -147,6 +172,14 @@ function handleSubmit() {
             </div>
 
             <form class="space-y-6" @submit.prevent="handleSubmit">
+              <!-- Error message -->
+              <div
+                v-if="error"
+                class="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-md"
+              >
+                {{ error }}
+              </div>
+
               <!-- Nom complet -->
               <div class="space-y-2">
                 <label
@@ -225,6 +258,32 @@ function handleSubmit() {
                 </div>
               </div>
 
+              <!-- Confirmation mot de passe -->
+              <div class="space-y-2">
+                <label
+                  class="font-label text-[0.6875rem] uppercase tracking-widest
+                         text-on-surface-variant font-medium ml-1"
+                >
+                  Confirmer le mot de passe
+                </label>
+                <div class="relative group">
+                  <div
+                    class="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-0
+                           bg-primary group-focus-within:h-3/4
+                           transition-all duration-300"
+                  />
+                  <input
+                    v-model="form.password_confirmation"
+                    type="password"
+                    placeholder="••••••••"
+                    autocomplete="new-password"
+                    class="w-full bg-surface-container-lowest border-none
+                           text-on-surface py-3 px-4 rounded-md focus:ring-0
+                           placeholder:text-on-surface-variant/30 text-sm font-body"
+                  />
+                </div>
+              </div>
+
               <!-- Avatar -->
               <div class="space-y-2">
                 <label
@@ -268,12 +327,14 @@ function handleSubmit() {
               <div class="pt-4">
                 <button
                   type="submit"
+                  :disabled="loading"
                   class="w-full py-4 rounded-lg bg-gradient-to-br from-primary
                          to-primary-container text-on-primary font-headline
                          font-bold text-sm tracking-wide shadow-lg shadow-primary/10
-                         active:scale-[0.98] transition-all duration-150"
+                         active:scale-[0.98] transition-all duration-150
+                         disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Créer mon compte
+                  {{ loading ? 'Inscription...' : 'Créer mon compte' }}
                 </button>
               </div>
             </form>
